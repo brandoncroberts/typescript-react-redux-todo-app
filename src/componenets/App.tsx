@@ -10,14 +10,23 @@ interface Props {
 interface State {}
 
 class _App extends Component<Props, State> {
-  state = {};
-
-  componentDidMount() {
+  onButtonClick = (): void => {
     this.props.fetchTodos();
+  };
+
+  renderList(): JSX.Element[] {
+    return this.props.todos.map((todo: Todo) => {
+      return <div key={todo.id}>{todo.title}</div>;
+    });
   }
 
   render() {
-    return <div>Hi!</div>;
+    return (
+      <div>
+        <button onClick={this.onButtonClick}>Fetch</button>
+        {this.renderList()}
+      </div>
+    );
   }
 }
 
