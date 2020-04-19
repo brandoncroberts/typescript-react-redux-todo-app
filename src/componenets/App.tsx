@@ -10,11 +10,24 @@ interface Props {
   fetchTodos: Function;
   deleteTodo: typeof deleteTodo;
 }
-interface State {}
+interface State {
+  fetching: boolean;
+}
 
 class _App extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { fetching: false };
+  }
+  componentDidUpdate(prevProps: Props) {
+    if (!prevProps.todos.length && this.props.todos.length) {
+      this.setState({ fetching: false });
+    }
+  }
+
   onButtonClick = (): void => {
     this.props.fetchTodos();
+    this.setState({ fetching: true });
   };
 
   onTodoClick = (id: number): void => {
@@ -35,6 +48,8 @@ class _App extends Component<Props, State> {
     return (
       <div>
         <button onClick={this.onButtonClick}>Fetch</button>
+        {this.state.fetching ? <p>Fetching</p> : null}
+
         {this.renderList()}
       </div>
     );
